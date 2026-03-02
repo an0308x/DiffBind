@@ -1,0 +1,29 @@
+name: diffbindfr
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pytorch=2.0.*
+  - pytorch-cuda=11.8
+  - torchvision
+  - cudatoolkit=11.8
+  - pip
+  - pip:
+    - torch-geometric==2.3.*
+    - torch-scatter
+    - torch-sparse
+    - torch-cluster
+    - rdkit==2023.3.*
+    - biopython==1.81
+    - scipy
+    - numpy
+    - pandas
+    - pyyaml
+    - tqdm
+    - wandb
+    - einops
+    - e3nn==0.5.*
+    - posebusters
+    - prody
