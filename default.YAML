@@ -1,0 +1,79 @@
+# DiffBindFR default configuration
+
+model:
+  hidden_dim: 256
+  num_heads: 8
+
+  # GVP protein encoder
+  gvp_layers: 3
+  gvp_node_s_dim: 128      # scalar node features
+  gvp_node_v_dim: 16       # vector node features
+  gvp_edge_s_dim: 32
+  gvp_edge_v_dim: 4
+
+  # Graph Transformer ligand encoder
+  gt_layers: 6
+  gt_hidden_dim: 256
+  gt_num_heads: 8
+
+  # Score network
+  score_layers: 6
+  sigma_embed_dim: 64
+
+  # MDN confidence model
+  mdn_gaussians: 10        # K mixture components
+
+diffusion:
+  # Ligand translation (R^3)
+  tr_sigma_min: 0.1
+  tr_sigma_max: 19.0
+
+  # Ligand rotation (SO(3) / IGSO3)
+  rot_sigma_min: 0.03
+  rot_sigma_max: 1.55
+
+  # Ligand torsion angles
+  tor_sigma_min: 0.0314    # ~1 degree
+  tor_sigma_max: 3.14      # ~180 degrees
+
+  # Side-chain chi1 torsion
+  sc_tor_sigma_min: 0.0314
+  sc_tor_sigma_max: 3.14
+
+sampling:
+  n_poses: 40              # poses sampled per complex
+  solver: SDE              # SDE or ODE
+  denoising_steps: 20      # reverse diffusion steps
+  batch_size: 8            # complexes per GPU batch
+
+data:
+  pocket_radius: 10.0      # Angstroms – pocket definition
+  max_pocket_residues: 80
+  max_ligand_atoms: 100
+  num_workers: 8
+
+  # PDBbind time-split
+  pdbbind_dir: data/PDBbind_v2020
+  split: time_split        # or mlsf_split
+  train_cutoff_year: 2019
+
+training:
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  batch_size: 8
+  max_epochs: 850
+  warmup_steps: 1000
+  grad_clip: 1.0
+  ema_decay: 0.999
+  seed: 42
+  log_interval: 100
+  val_interval: 5000        # steps
+
+  # Pose loss weights
+  lambda_tr: 1.0
+  lambda_rot: 1.0
+  lambda_tor: 1.0
+  lambda_sc: 1.0
+  lambda_mdn: 1.0
+  lambda_atom: 0.5
+  lambda_bond: 0.5
